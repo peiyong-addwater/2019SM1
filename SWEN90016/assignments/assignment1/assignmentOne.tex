@@ -125,10 +125,59 @@ The value to the external stakeholder/s as follows:
 \paragraph{Ans. 2.1}
 Challenging difficulties:
 \begin{itemize}
-	\item 
+	\item Different aquarium technology devices may have different interfaces, which will cause a lot of trouble when writing the code for collecting aquarium data from them. Also, different devices may output data with different formats. Hence the platform should be compatible with all potential data formats;
+	\item The website should be compatible with multiple sign in/login methods, such as sign in/login via email, phone number, google and/or facebook accounts. When the same user uses multiple ways to sign in/login, the website should be able to connect all the information with one user profile instead multiple. Also developers need to implement a security strategy to guard all these personal information.
 \end{itemize}
+\paragraph{Ans. 2.2} Specific risks:
+\begin{itemize}
+	\item IoT security risks. Although the developers can implement a well-established security strategy for the web platform itself, there still could be security breaches and loopholes in the aquarium devices, which could be exploited by hackers, and even carrying malicious hardware/software which is intend to steal information or damage the system. To fill such security breaches, initially the developers can control what kind of devices the platform will support for data uploading. Also, the platform could require their users to change the initial passwords for their aquarium monitoring device as well as ensure the web interface is not vulnerable to XSS, SQLi or CSRF\cite{IoTsecurity}. 
+	\item Risks from incompatible data formats. Different users may choose different devices to monitor the condition of their aquarium. Different devices may adopt different data output formats and different protocols. Hence when users trying to monitor their aquarium with unsupported devices, the data may not be collected and/or interpreted by the web platform properly, which may lead to some data displaying problem. This could mislead the user to believe their aquarium in a good condition while in fact they are not. For the countermeasures to such risks, the developers can try to support as many kind of devices as they can during the initial development stage and make a list of devices that the platform support on the website. When users trying to use an unsupported device, the website can send a warning message to the user and in the meantime the developers could add support for such device as quickly as the can.
+\end{itemize}
+\paragraph{Ans. 2.3}Four high level features of the initial software product:
 
+\begin{table}[htbp]
+    \centering
+    \caption{High Level Features, Priority and Justification }
+    \begin{tabular}{p{2in}p{0.5in}p{2in}}
+    \hline
+    Requirement &Priority &Justification \\
+    \hline 
+    User profile, includes name, username and password & High & Variety of of user-specific information(aquarium) need to be stored to ensure the platform functions properly for the target audience\cite{userprofile}. \\
+    \hline
+     Aquarium profile & High & The goal of this project requires that users can setup their aquarium profile when they sign up.\\
+     \hline
+     Syncing with aquarium technology devices& High & After the users signed up and set up their aquarium profile, they need to link their aquarium devices to the website so they can monitor the environment of the aquarium on the website.\\
+     \hline
+      Extend the website to include the social platform& Medium &The developer do not need to implement this function at the initial stage of the development (first six months), but it will be good to provide the users with a platform to discuss fish and aquarium related topics so there can be potential aquarium brands as well as aquarium technology device creators willing to advertise on the website, bring income to the stakeholders. \\
+    \hline
+    \end{tabular}
+\end{table}
+
+
+\newpage
 \section{Discussion}
+\paragraph{Ans. 3.1}For this project, we could possibly choose from the incremental build model or the agile model.
+\begin{itemize}
+	\item For the incremental build model:
+	\begin{enumerate}
+		\item Since Mr. X already has a clear plan on what features need to be implemented during the initial stage and what is not that urgently need and can be realized afterwards, the budget can be more controlled to a certain scope than the agile model. With a clear and controlled budget, Mr. Y will be more likely to continue his investment after the initial stage.
+		\item Since aquaria are usually used to keep pet fish collected by the hobbyists, some fish can be rare and expensive\cite{aquawiki}. Hence an unstable aquarium environment, which often caused by unreliable data monitoring system, can lead to significant property loss  of the users. Hence we need a rigid SDLC model to detect the errors prior to the release of the product. Compared to waterfall model, which makes the product hard to scale up once finished, incremental model allows changes as well as easy identification of error during the development stage.
+		\item After the initial development stage, when the 'must have' features have already been implemented, there could be several 'good to have' features need to be added to the project. Although compared to waterfall model, the incremental model allows a certain degree of change to the project, but it is not as flexible as the agile model, since Mr.X also have not a clear plan or schedule for the 'good to have' features. 
+		\item Due to the nature of the incremental model, once a problem detected and need to be corrected, all other units will also need correction, which will consume a considerable amount of time\cite{incremodel} and could be very inconvenient for the users need to monitor their aquaria remotely and online.
+	\end{enumerate}
+	\item For the agile model:
+	\begin{enumerate}
+		\item The agile model allows fast development as well as deployment of projects, which will make Mr.Y see that his investment comes with a result. The functionality can be rapidly developed and demonstrated to the stakeholders. The release of core functions of the platform may be less than the initially planed six-month time. 
+		\item Development of the project will need less resources and less detailed planning compared to the incremental model, and new features such as extending the website to include the social platform will be much easier to be implemented with less documentation work.
+		\item However, as the agile model does not require a detailed plan nor a well established documentation, the budget could go beyond the scope of Mr.Y's initial investment. And the sustainability, maintainability also the extensibility\cite{agilemodel} could be worse than the incremental model. Errors can occur in the release stage and cause loss to the users before the team could fix the bug.
+		\item When it comes to a new stage of development, as agile project is not very well documented, it could be hard to transfer the project to a new group, and core features may malfunction when a new team decides to alter or add some features.
+	\end{enumerate}
+\end{itemize}
+\paragraph{Ans. 3.2}From the author's point of view, we could apply a mixed model of both of the incremental and the agile model. Hence, a more rigid and well-documented agile model or a more flexible incremental model.
+
+\paragraph{} During the first six months of development --- the initial stage of the project, to make full use of Mr.Y's investment, we need a detailed plan. Also, to develop a well-established security strategy, the developers should also come up with a rigid plan and brainstorm possible security loopholes as well as countermeasures. In this stage, the group will need a rigid model(but not too rigid like waterfall) and produce a full and accurate document for the core functions as well as security functions. Since malfunctioning of core features could cause users to lose some very rare and expensive pet fish, the developers must adopt a more rigid build model (compared to agile) to identify possible errors and fix them before the first release.
+
+\paragraph{}After the initial stage of development and all the 'must have' features are properly implemented without serious errors, the developers can adopt the agile model for further developments of the 'good to have' and 'can do without' features as well as adding support for new aquarium technology devices. Due to incremental model applied in the initial stage, the maintenance of the platform could be very easy with detailed documentation. Also, the core features  will continue to function properly when the developers adding new features to the system since they are adopting agile after the initial stage of development.  
 
 
 
@@ -150,8 +199,12 @@ Challenging difficulties:
 
 
 
+
+
+
+%\newpage
 \bibliographystyle{IEEEtranN}
-\bibliography{myref}
+\bibliography{myref.bib}
 
 \end{document}
 
