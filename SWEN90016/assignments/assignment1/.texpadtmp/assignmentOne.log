@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.5.9)  4 APR 2019 22:44
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.5.9)  5 APR 2019 20:55
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -727,11 +727,6 @@ Overfull \hbox (2.60603pt too wide) in paragraph at lines 151--151
  []
 
 
-Underfull \hbox (badness 2126) in paragraph at lines 151--152
-\T1/futs/m/n/10.95 (first six months), but it will
- []
-
-
 Underfull \hbox (badness 1406) in paragraph at lines 151--152
 \T1/futs/m/n/10.95 be good to pro-vide the users
  []
@@ -754,20 +749,30 @@ Class scrartcl Warning: incompatible usage of \@ssect detected.
 (scrartcl)              \scr@s@ct@@nn@m@ locally.
 (scrartcl)              This could result in several error messages on input line 2.
 
-) [5] (/Users/wangpeiyong/Desktop/2019SM1/SWEN90016/assignments/assignment1/.texpadtmp/assignmentOne.aux) ) 
+
+Underfull \hbox (badness 3039) in paragraph at lines 27--30
+[]\T1/futs/m/n/10.95 ``Case Study for SWEN90016 As-sign-ment One.'' [On-line]. Avail-
+ []
+
+
+Underfull \hbox (badness 2941) in paragraph at lines 27--30
+\T1/futs/m/n/10.95 able: https://app.lms.unimelb.edu.au/bbcswebdav/pid-6964500-dt-content-rid-
+ []
+
+[5]) [6] (/Users/wangpeiyong/Desktop/2019SM1/SWEN90016/assignments/assignment1/.texpadtmp/assignmentOne.aux) ) 
 Here is how much of TeX's memory you used:
- 8472 strings out of 492649
- 129759 string characters out of 6129623
- 398864 words of memory out of 5000000
- 12186 multiletter control sequences out of 15000+600000
+ 8475 strings out of 492649
+ 129795 string characters out of 6129623
+ 398882 words of memory out of 5000000
+ 12189 multiletter control sequences out of 15000+600000
  74032 words of font info for 84 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  51i,11n,51p,9130b,332s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2018/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/texlive/2018/texmf-dist/fonts/type1/adobe/utopia/putr8a.pfb>
-Output written on /Users/wangpeiyong/Desktop/2019SM1/SWEN90016/assignments/assignment1/.texpadtmp/assignmentOne.pdf (5 pages, 33177 bytes).
+Output written on /Users/wangpeiyong/Desktop/2019SM1/SWEN90016/assignments/assignment1/.texpadtmp/assignmentOne.pdf (6 pages, 33877 bytes).
 PDF statistics:
- 25 PDF objects out of 1000 (max. 8388607)
- 16 compressed objects within 1 object stream
+ 28 PDF objects out of 1000 (max. 8388607)
+ 18 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 
