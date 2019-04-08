@@ -173,8 +173,10 @@ simScore target guess = sp - sndo - sodn
 nextGuess :: ([Pitch],GameState) -> (Int,Int,Int) -> ([Pitch],GameState)
 nextGuess ([prev_p1, prev_p2, prev_p3], prev_state) (sp, sndo, sodn) = ([next_p1, next_p2, next_p3], next_state)
     where
+        -- prev_score = sp - sndo - sodn
         prev_guess = Set.fromList [prev_p1, prev_p2, prev_p3]
         next_state
+            -- | sp == 0 = [chord | chord <- prev_state, Set.null (Set.intersection prev_guess chord)]
             | (sp == 0 && sndo == 0 && sodn == 0) = filter (\x -> whetherSameNotes x prev_guess == False) (filter (\x -> whetherSameOctave x prev_guess == False) (filter (\x -> whetherSamePitches x prev_guess== False) prev_state))
             | (sp == 0 && sndo /= 0 && sodn /= 0) = filter (\x -> whetherSameNotes x prev_guess == True) (filter (\x -> whetherSameOctave x prev_guess == True) (filter (\x -> whetherSamePitches x prev_guess== False) prev_state))
             | (sp == 0 && sndo /= 0 && sodn == 0) = filter (\x -> whetherSameNotes x prev_guess == True) (filter (\x -> whetherSameOctave x prev_guess == False) (filter (\x -> whetherSamePitches x prev_guess== False) prev_state))
@@ -183,6 +185,8 @@ nextGuess ([prev_p1, prev_p2, prev_p3], prev_state) (sp, sndo, sodn) = ([next_p1
             | (sp /= 0 && sndo /= 0 && sodn /= 0) = filter (\x -> whetherSameNotes x prev_guess == True) (filter (\x -> whetherSameOctave x prev_guess == True) (filter (\x -> whetherSamePitches x prev_guess== True) prev_state))
             | (sp /= 0 && sndo == 0 && sodn /= 0) = filter (\x -> whetherSameNotes x prev_guess == False) (filter (\x -> whetherSameOctave x prev_guess == True) (filter (\x -> whetherSamePitches x prev_guess== True) prev_state))
             | (sp /= 0 && sndo /= 0 && sodn == 0) = filter (\x -> whetherSameNotes x prev_guess == True) (filter (\x -> whetherSameOctave x prev_guess == False) (filter (\x -> whetherSamePitches x prev_guess== True) prev_state))
+            -- When sp is not zero, discard possible chords without common pitches as the previous guess
             -- | otherwise = [chord | chord <- prev_state, (Set.null (Set.intersection prev_guess chord)) == False && chord /= prev_guess]
+        -- next_state = [chord | chord <- new_state, ] -- keep the chords similiarity score 
         state_space = length next_state
         [next_p1, next_p2, next_p3] =Set.toList (next_state !! (state_space `quot` 2))

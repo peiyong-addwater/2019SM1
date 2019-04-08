@@ -111,13 +111,7 @@ initialGuess = ([pitch1, pitch2, pitch3], allChords)
 correctPitches :: [Pitch] -> [Pitch] -> Int
 correctPitches chord1 chord2 = (length (chord1 ++ chord2)) - (Set.size (Set.fromList (chord1 ++ chord2)))
 
--- Find whether two chords have same pitches
-whetherSamePitches :: Chord -> Chord -> Bool
-whetherSamePitches target guess
-    | correctPitches (Set.toList target) (Set.toList guess) /= 0 = True
-    | otherwise = False
-
--- Takes a target and a guess and returns how many pitches have the right note but the wrong octave (correct notes)
+-- Takes a target and a guess and returns  how many pitches have the right note but the wrong octave (correct notes)
 correctNotes :: [Pitch] -> [Pitch] -> Int
 correctNotes target guess = sndo
     where
@@ -128,13 +122,7 @@ correctNotes target guess = sndo
         target_note   = map (\x -> [x !! 0]) target_stringList
         sndo = (length guess) - length (target_note \\ guess_note) - sp
 
--- Find whether two chords have the same note but different octaves
-whetherSameNotes :: Chord -> Chord -> Bool
-whetherSameNotes target guess 
-    | correctNotes (Set.toList target) (Set.toList guess) /= 0 = True
-    | otherwise = False
-
--- Takes a target and a guess and returns how many pitches have the right octave but the wrong note (correct octaves)
+-- Takes a target and a guess and returns  how many pitches have the right octave but the wrong note (correct octaves)
 correctOctaves :: [Pitch] -> [Pitch] -> Int
 correctOctaves target guess = sodn
     where 
@@ -145,11 +133,6 @@ correctOctaves target guess = sodn
         target_octave = map (\x -> [x !! 1]) target_stringList
         sodn = (length guess) - length (target_octave \\ guess_octave) - sp
 
--- Find whether two chords have same octave but different note
-whetherSameOctave :: Chord -> Chord -> Bool
-whetherSameOctave target guess 
-    | correctOctaves (Set.toList target) (Set.toList guess) /= 0 = True
-    | otherwise = False
 
 -- Takes a target and a guess, respectively, and returns the appropriate feedback
 -- sp: same pitch; sndo: same note different octave; sodn: same ocatve different note
@@ -160,10 +143,7 @@ feedback target guess = (sp, sndo, sodn)
         sndo = correctNotes target guess
         sodn = correctOctaves target guess
         
--- Calculate similiarity score based on feed back
-simScore :: Chord -> Chord -> Int
-simScore target guess = sp - sndo - sodn
-    where (sp, sndo, sodn) = feedback (Set.toList target) (Set.toList guess)
+        
         
 
 -- Takes as input a pair of the previous guess and game state, and the feedback to this
@@ -175,14 +155,9 @@ nextGuess ([prev_p1, prev_p2, prev_p3], prev_state) (sp, sndo, sodn) = ([next_p1
     where
         prev_guess = Set.fromList [prev_p1, prev_p2, prev_p3]
         next_state
-            | (sp == 0 && sndo == 0 && sodn == 0) = filter (\x -> whetherSameNotes x prev_guess == False) (filter (\x -> whetherSameOctave x prev_guess == False) (filter (\x -> whetherSamePitches x prev_guess== False) prev_state))
-            | (sp == 0 && sndo /= 0 && sodn /= 0) = filter (\x -> whetherSameNotes x prev_guess == True) (filter (\x -> whetherSameOctave x prev_guess == True) (filter (\x -> whetherSamePitches x prev_guess== False) prev_state))
-            | (sp == 0 && sndo /= 0 && sodn == 0) = filter (\x -> whetherSameNotes x prev_guess == True) (filter (\x -> whetherSameOctave x prev_guess == False) (filter (\x -> whetherSamePitches x prev_guess== False) prev_state))
-            | (sp == 0 && sndo == 0 && sodn /= 0) = filter (\x -> whetherSameNotes x prev_guess == False) (filter (\x -> whetherSameOctave x prev_guess == True) (filter (\x -> whetherSamePitches x prev_guess== False) prev_state))
-            | (sp /= 0 && sndo == 0 && sodn == 0) = filter (\x -> whetherSameNotes x prev_guess == False) (filter (\x -> whetherSameOctave x prev_guess == False) (filter (\x -> whetherSamePitches x prev_guess== True) prev_state))
-            | (sp /= 0 && sndo /= 0 && sodn /= 0) = filter (\x -> whetherSameNotes x prev_guess == True) (filter (\x -> whetherSameOctave x prev_guess == True) (filter (\x -> whetherSamePitches x prev_guess== True) prev_state))
-            | (sp /= 0 && sndo == 0 && sodn /= 0) = filter (\x -> whetherSameNotes x prev_guess == False) (filter (\x -> whetherSameOctave x prev_guess == True) (filter (\x -> whetherSamePitches x prev_guess== True) prev_state))
-            | (sp /= 0 && sndo /= 0 && sodn == 0) = filter (\x -> whetherSameNotes x prev_guess == True) (filter (\x -> whetherSameOctave x prev_guess == False) (filter (\x -> whetherSamePitches x prev_guess== True) prev_state))
-            -- | otherwise = [chord | chord <- prev_state, (Set.null (Set.intersection prev_guess chord)) == False && chord /= prev_guess]
+            -- Discard possible chords with common pitches as the previous guess when sp = 0
+            | sp == 0 = [chord | chord <- prev_state, Set.null (Set.intersection prev_guess chord)]
+            -- When sp is not zero, discard possible chords without common pitches as the previous guess
+            | otherwise = [chord | chord <- prev_state, (Set.null (Set.intersection prev_guess chord)) == False && chord /= prev_guess]
         state_space = length next_state
         [next_p1, next_p2, next_p3] =Set.toList (next_state !! (state_space `quot` 2))
