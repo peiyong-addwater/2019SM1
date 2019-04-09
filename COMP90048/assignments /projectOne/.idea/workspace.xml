@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="afc3a568-ee06-48de-85e8-dac59f288899" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Proj1.hs" beforeDir="false" afterPath="$PROJECT_DIR$/Proj1.hs" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -16,6 +14,7 @@
     <session id="43865896">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
+          <entry key="project.closed" value="1" />
           <entry key="project.open.time.1" value="1" />
           <entry key="project.opened" value="1" />
         </counts>
@@ -33,11 +32,13 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="hs" value="27" />
+          <entry key="txt" value="39" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="Haskell" value="27" />
+          <entry key="PLAIN_TEXT" value="39" />
         </counts>
       </usages-collector>
     </session>
@@ -47,7 +48,7 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Proj1.hs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-212">
+            <state relative-caret-position="290">
               <caret line="145" column="3" selection-start-line="145" selection-start-column="3" selection-end-line="145" selection-end-column="3" />
             </state>
           </provider>
@@ -115,7 +116,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1554789889151" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1554790017972" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
@@ -142,12 +143,20 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1554789481893</updated>
-      <workItem from="1554789483264" duration="401000" />
+      <workItem from="1554789483264" duration="496000" />
     </task>
+    <task id="LOCAL-00001" summary="Final version of COMP90048 Project One">
+      <created>1554790039913</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1554790039914</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="401000" />
+    <option name="totallyTimeSpent" value="496000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1680" height="1050" extended-state="0" />
@@ -190,6 +199,10 @@
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Final version of COMP90048 Project One" />
+    <option name="LAST_COMMIT_MESSAGE" value="Final version of COMP90048 Project One" />
+  </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/Proj1Test.hs">
       <provider selected="true" editor-type-id="text-editor">
@@ -203,7 +216,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Proj1.hs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-212">
+        <state relative-caret-position="290">
           <caret line="145" column="3" selection-start-line="145" selection-start-column="3" selection-end-line="145" selection-end-column="3" />
         </state>
       </provider>
