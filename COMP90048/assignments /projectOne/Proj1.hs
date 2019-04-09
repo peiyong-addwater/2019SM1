@@ -2,7 +2,8 @@
 --  ID       : 955986
 --  Author   : Peiyong Wang
 --  LMS ID   : peiyongw 
---  Purpose  : This is a program that plays the game of "Musician", which implements the performer and the composer part of the game
+--  Purpose  : This is a program that plays the game of "Musician",
+--             which implements the performer and the composer part of the game
 
 module Proj1 (Pitch, toPitch, feedback, GameState, initialGuess, nextGuess) where
 
@@ -82,7 +83,8 @@ ocatveToChar o
 allPitches :: [Pitch]
 allPitches = [Pitch note octave | note <- [A, B, C, D, E, F, G], octave <- [1, 2, 3]]
 
--- List of all valid Chords, linear time to create Set from List if the List is ordered,
+-- List of all valid Chords, linear time to create Set
+-- from List if the List is ordered,
 -- also the ordering makes sure that there is no duplicate Pitch in a Chord
 allChords :: [Chord]
 allChords = [Set.fromList [p1, p2, p3] | p1 <- allPitches, p2 <- allPitches, p3 <- allPitches, p1 < p2 && p2 < p3]
@@ -103,23 +105,19 @@ initialGuess :: ([Pitch],GameState)
 initialGuess = ([pitch1, pitch2, pitch3], allChords)
     where
         numPossibleChords = length allChords
-        initPick = allChords !! (numPossibleChords `quot` 2) -- The middle one of all possible chords
+        initPick = allChords !! (numPossibleChords `quot` 2)
         initGuess = Set.toList initPick
         pitch1 = initGuess !! 0
         pitch2 = initGuess !! 1
         pitch3 = initGuess !! 2
 
--- Takes a target and a guess and returns how many pitches in the guess are included in the target (correct pitches)
+-- Takes a target and a guess and returns how many pitches in
+-- the guess are included in the target (correct pitches)
 correctPitches :: [Pitch] -> [Pitch] -> Int
 correctPitches chord1 chord2 = (length (chord1 ++ chord2)) - (Set.size (Set.fromList (chord1 ++ chord2)))
 
--- Find whether two chords have same pitches
-whetherSamePitches :: Chord -> Chord -> Bool
-whetherSamePitches target guess
-    | correctPitches (Set.toList target) (Set.toList guess) /= 0 = True
-    | otherwise = False
-
--- Takes a target and a guess and returns how many pitches have the right note but the wrong octave (correct notes)
+-- Takes a target and a guess and returns how many pitches
+-- have the right note but the wrong octave (correct notes)
 correctNotes :: [Pitch] -> [Pitch] -> Int
 correctNotes target guess = sndo
     where
@@ -130,13 +128,8 @@ correctNotes target guess = sndo
         target_note   = map (\x -> [x !! 0]) target_stringList
         sndo = (length guess) - length (target_note \\ guess_note) - sp
 
--- Find whether two chords have the same note but different octaves
-whetherSameNotes :: Chord -> Chord -> Bool
-whetherSameNotes target guess 
-    | correctNotes (Set.toList target) (Set.toList guess) /= 0 = True
-    | otherwise = False
-
--- Takes a target and a guess and returns how many pitches have the right octave but the wrong note (correct octaves)
+-- Takes a target and a guess and returns how many pitches have the
+-- right octave but the wrong note (correct octaves)
 correctOctaves :: [Pitch] -> [Pitch] -> Int
 correctOctaves target guess = sodn
     where 
@@ -147,14 +140,10 @@ correctOctaves target guess = sodn
         target_octave = map (\x -> [x !! 1]) target_stringList
         sodn = (length guess) - length (target_octave \\ guess_octave) - sp
 
--- Find whether two chords have same octave but different note
-whetherSameOctave :: Chord -> Chord -> Bool
-whetherSameOctave target guess 
-    | correctOctaves (Set.toList target) (Set.toList guess) /= 0 = True
-    | otherwise = False
-
--- Takes a target and a guess, respectively, and returns the appropriate feedback
--- sp: same pitch; sndo: same note different octave; sodn: same ocatve different note
+-- Takes a target and a guess, respectively,
+-- and returns the appropriate feedback
+-- sp: same pitch; sndo: same note different octave;
+-- sodn: same ocatve different note
 feedback :: [Pitch] -> [Pitch] -> (Int, Int, Int)
 feedback target guess = (sp, sndo, sodn)
     where 
@@ -163,21 +152,26 @@ feedback target guess = (sp, sndo, sodn)
         sodn = correctOctaves target guess
         
 -- Calculate similiarity score based on feed back
--- simScore1 forcus more on the sumation of the feedback to get a overall similiarity by adding sp, sndo and sodn to the metric with equal contribution
+-- simScore1 forcus more on the sumation of the feedback to get a overall
+-- similiarity by adding sp, sndo and sodn to the metric with equal contribution
 simScore1 :: Chord -> Chord -> Int
 simScore1 target guess = sp + sndo + sodn
     where (sp, sndo, sodn) = feedback (Set.toList target) (Set.toList guess)
 
--- simScore2 emphasis on the number of same pitches and use sndo and sodn as panalties.    
+-- simScore2 emphasis on the number of same pitches and use sndo and
+-- sodn as panalties.
 simScore2 :: Chord -> Chord -> Int
 simScore2 target guess = sp - sndo - sodn
     where (sp, sndo, sodn) = feedback (Set.toList target) (Set.toList guess)
         
 
--- Takes as input a pair of the previous guess and game state, and the feedback to this
--- guess as a triple of correct pitches, notes, and octaves, and returns a pair of the next
+-- Takes as input a pair of the previous guess and game state,
+-- and the feedback to this
+-- guess as a triple of correct pitches, notes, and octaves,
+-- and returns a pair of the next
 -- guess and game state.
--- sp: same pitch; sndo: same note different octave; sodn: same ocatve different note
+-- sp: same pitch; sndo: same note different octave; sodn:
+-- same ocatve different note
 nextGuess :: ([Pitch],GameState) -> (Int,Int,Int) -> ([Pitch],GameState)
 nextGuess ([prev_p1, prev_p2, prev_p3], prev_state) (sp, sndo, sodn) = ([next_p1, next_p2, next_p3], next_state)
     where
