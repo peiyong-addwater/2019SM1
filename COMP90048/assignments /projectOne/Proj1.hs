@@ -8,6 +8,8 @@ module Proj1 (Pitch, toPitch, feedback, GameState, initialGuess, nextGuess) wher
 
 import qualified Data.Set as Set
 import Data.List
+import Data.Ord
+import Data.Function (on)
 
 -- The data type representing Note of the Pitches
 data Note = A | B | C | D | E | F | G deriving (Eq, Ord, Show, Enum)
@@ -161,8 +163,14 @@ feedback target guess = (sp, sndo, sodn)
         sodn = correctOctaves target guess
         
 -- Calculate similiarity score based on feed back
-simScore :: Chord -> Chord -> Int
-simScore target guess = sp - sndo - sodn
+-- simScore1 forcus more on the sumation of the feedback to get a overall similiarity by adding sp, sndo and sodn to the metric with equal contribution
+simScore1 :: Chord -> Chord -> Int
+simScore1 target guess = sp + sndo + sodn
+    where (sp, sndo, sodn) = feedback (Set.toList target) (Set.toList guess)
+
+-- simScore2 emphasis on the number of same pitches and use sndo and sodn as panalties.    
+simScore2 :: Chord -> Chord -> Int
+simScore2 target guess = sp - sndo - sodn
     where (sp, sndo, sodn) = feedback (Set.toList target) (Set.toList guess)
         
 
@@ -174,15 +182,26 @@ nextGuess :: ([Pitch],GameState) -> (Int,Int,Int) -> ([Pitch],GameState)
 nextGuess ([prev_p1, prev_p2, prev_p3], prev_state) (sp, sndo, sodn) = ([next_p1, next_p2, next_p3], next_state)
     where
         prev_guess = Set.fromList [prev_p1, prev_p2, prev_p3]
-        next_state
-            | (sp == 0 && sndo == 0 && sodn == 0) = filter (\x -> whetherSameNotes x prev_guess == False) (filter (\x -> whetherSameOctave x prev_guess == False) (filter (\x -> whetherSamePitches x prev_guess== False) prev_state))
-            | (sp == 0 && sndo /= 0 && sodn /= 0) = filter (\x -> whetherSameNotes x prev_guess == True) (filter (\x -> whetherSameOctave x prev_guess == True) (filter (\x -> whetherSamePitches x prev_guess== False) prev_state))
-            | (sp == 0 && sndo /= 0 && sodn == 0) = filter (\x -> whetherSameNotes x prev_guess == True) (filter (\x -> whetherSameOctave x prev_guess == False) (filter (\x -> whetherSamePitches x prev_guess== False) prev_state))
-            | (sp == 0 && sndo == 0 && sodn /= 0) = filter (\x -> whetherSameNotes x prev_guess == False) (filter (\x -> whetherSameOctave x prev_guess == True) (filter (\x -> whetherSamePitches x prev_guess== False) prev_state))
-            | (sp /= 0 && sndo == 0 && sodn == 0) = filter (\x -> whetherSameNotes x prev_guess == False) (filter (\x -> whetherSameOctave x prev_guess == False) (filter (\x -> whetherSamePitches x prev_guess== True) prev_state))
-            | (sp /= 0 && sndo /= 0 && sodn /= 0) = filter (\x -> whetherSameNotes x prev_guess == True) (filter (\x -> whetherSameOctave x prev_guess == True) (filter (\x -> whetherSamePitches x prev_guess== True) prev_state))
-            | (sp /= 0 && sndo == 0 && sodn /= 0) = filter (\x -> whetherSameNotes x prev_guess == False) (filter (\x -> whetherSameOctave x prev_guess == True) (filter (\x -> whetherSamePitches x prev_guess== True) prev_state))
-            | (sp /= 0 && sndo /= 0 && sodn == 0) = filter (\x -> whetherSameNotes x prev_guess == True) (filter (\x -> whetherSameOctave x prev_guess == False) (filter (\x -> whetherSamePitches x prev_guess== True) prev_state))
-            -- | otherwise = [chord | chord <- prev_state, (Set.null (Set.intersection prev_guess chord)) == False && chord /= prev_guess]
+        prev_score1 = sp + sndo + sodn
+        prev_score2 = sp - sndo - sodn
+        -- filter through the previous game state according to the feedback
+        choose_space_sp
+            | sp == 0 = [chord | chord <- prev_state, Set.null (Set.intersection prev_guess chord)]
+            | sp == 1 = [chord | chord <- prev_state, correctPitches (Set.toList prev_guess) (Set.toList chord) == 1]
+            | sp == 2 = [chord | chord <- prev_state, correctPitches (Set.toList prev_guess) (Set.toList chord) == 2]
+            | sp == 3 = [chord | chord <- prev_state, correctPitches (Set.toList prev_guess) (Set.toList chord) == 3]
+        choose_space_sndo
+            | sndo == 0 = [chord | chord <- choose_space_sp, correctNotes (Set.toList prev_guess) (Set.toList chord) == 0]
+            | sndo == 1 = [chord | chord <- choose_space_sp, correctNotes (Set.toList prev_guess) (Set.toList chord) == 1]
+            | sndo == 2 = [chord | chord <- choose_space_sp, correctNotes (Set.toList prev_guess) (Set.toList chord) == 2]
+            | sndo == 3 = [chord | chord <- choose_space_sp, correctNotes (Set.toList prev_guess) (Set.toList chord) == 3]
+        choose_space_sodn
+            | sodn == 0 = [chord | chord <- choose_space_sndo, correctOctaves (Set.toList prev_guess) (Set.toList chord) == 0]
+            | sodn == 1 = [chord | chord <- choose_space_sndo, correctOctaves (Set.toList prev_guess) (Set.toList chord) == 1]
+            | sodn == 2 = [chord | chord <- choose_space_sndo, correctOctaves (Set.toList prev_guess) (Set.toList chord) == 2]
+            | sodn == 3 = [chord | chord <- choose_space_sndo, correctOctaves (Set.toList prev_guess) (Set.toList chord) == 3]
+        choose_space = choose_space_sodn
         state_space = length next_state
-        [next_p1, next_p2, next_p3] =Set.toList (next_state !! (state_space `quot` 2))
+        -- filter the possible chords according to similiarity scores
+        next_state = filter (\x -> simScore2 x prev_guess >= prev_score2) (filter (\x -> simScore1 x prev_guess >= prev_score1) choose_space)
+        [next_p1, next_p2, next_p3] = Set.toList (next_state !! (state_space `quot` 2))
