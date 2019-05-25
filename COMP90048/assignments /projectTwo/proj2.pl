@@ -1,8 +1,9 @@
-%  File     : proj2.pl
-%  Author   : Peiyong Wang (peiyongw@student.unimelb.edu.au)
-%  ID       : 955986
-%  Login    : peiyongw
-%  Date     : May 8 2019
+%  File         : proj2.pl
+%  Author       : Peiyong Wang (peiyongw@student.unimelb.edu.au)
+%  ID           : 955986
+%  Login        : peiyongw
+%  Date         : May 8 2019
+%  Last Modified: May 21 2019
 /**
 * Maths Puzzles                                                                                                               
 * A maths puzzle is a square grid of squares, each to be filled in with a                                                      
@@ -46,9 +47,12 @@ puzzle_solution([Head|Tail]):-
 *
 * calculates the product of all the elements in a list
 * succeeds if the elements in the list are between 1 and 9
+* and the product of all the elements in the list equals to "Value"
 *
 * @param List is a row from the input puzzle (or the transposed puzzle) list
-* @param Value is the product of all the elements in the input list
+* @param Value the integer in the first row/column of the puzzle, which could 
+*        be equal to the product of all the elements in the list.
+*              
 * */
 product_constraint([], 1).
 product_constraint([Head|Tail], Value):- 
@@ -62,9 +66,11 @@ product_constraint([Head|Tail], Value):-
 * 
 * calculate the sum of all the elements in a list
 * succeeds if the elements in the list are between 1 and 9
+* and the sum equals to the sum of the list equals to the "Value".
 * 
 * @param List is a row from the input puzzle (or the transposed puzzle) list
-* @param Value is the sum of all the elements in the input list
+* @param Value is the given value in the first row/column of the puzzle, which could 
+*        be equal to the sum of the list.
 * */
 sum_constraint([],0).
 sum_constraint([Head|Tail], Value):-
@@ -75,40 +81,20 @@ sum_constraint([Head|Tail], Value):-
 /**
 * row_constraint(?Row_List:list)
 * 
-* check whether a row follws the sum or product constraints.
+* check whether a row follws the sum or product constraints by calling
+* the sum_constraint and product_constraint predicts.
 *
 * @param Row_List is a row from the (transposed) list of the puzzle. 
 * */
-% row_constraint: check whether a row follows the sum or product constraints.
 row_constraint([Head|Tail]):-
     sum_constraint(Tail, Head); product_constraint(Tail, Head).
 
 /**
- * all_distinct_tail(+Puzzle_Row:List)
- *
- * check whether the tail elements are different from each other.
- *
- * @param Puzzle_Row is a row from the filled puzzle.
- *
- * */
-all_distinct_tail([_|Tail]):-
-    all_distinct(Tail).
-/**
- * puzzle_columns_constriant(+Row_List:list)
- *
- * check the tail of the given puzzle (transposed) falls in the constraints
- *
- * @param Row_List is a row from the transposed puzzle list.
- * */
- puzzle_columns_constriant([]).
- puzzle_columns_constriant([Head|Tail]):-
-    transpose([Head|Tail],[_|TransposedTail]),
-    puzzle_rows_constraint(TransposedTail).
-
-/**
  * puzzle_rows_constraint(+Row_List:list)
  *
- * check the tail of the given puzzle falls in the constraints
+ * check the tail of the given puzzle falls in the constraints by
+ * calling the row_constraint predict which is designed for checking
+ * whether a single row follows the puzzle constraint (sum or product).
  *
  * @param Row_List is a row from the filled puzzle list.
  * */
@@ -119,9 +105,36 @@ puzzle_rows_constraint([HeadList|Tail]):-
     puzzle_rows_constraint(Tail).
 
 /**
+ * all_distinct_tail(+Puzzle_Row:List)
+ *
+ * check whether the tail elements are different from each other.
+ * calling the all_distinct predicate.
+ *
+ * @param Puzzle_Row is a row from the filled puzzle.
+ *
+ * */
+all_distinct_tail([_|Tail]):-
+    all_distinct(Tail).
+/**
+ * puzzle_columns_constriant(+Row_List:list)
+ *
+ * check if the tail of the given puzzle (transposed) falls in the constraints
+ * for the rows (rows and columns follow the same kind of constraint so we can just
+ * call the transpose predict and apply the predict for checking rows to the
+ * transposed puzzle)
+ *
+ * @param Row_List is a row from the transposed puzzle list.
+ * */
+ puzzle_columns_constriant([]).
+ puzzle_columns_constriant([Head|Tail]):-
+    transpose([Head|Tail],[_|TransposedTail]),
+    puzzle_rows_constraint(TransposedTail).
+
+/**
  * diag_constraint(+Puzzle_List:list, -Row_Number:integer, -Diag_Value:integer)
  *
- * check whether the diag(puzzle) satisfy the restrictions.
+ * succeeds when the diagnonal values of the puzzle are same. We only take the tail
+ * of the puzzle into account.
  *
  * @param Puzzle_List is the list contains a filled puzzle.
  * @param Row_Number is an integer indicating the row that being checked for 
